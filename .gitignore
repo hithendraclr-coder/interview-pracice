@@ -1,0 +1,50 @@
+# ===================================================================
+# Git Ignore Configuration - AI Interview Coach
+# ===================================================================
+
+# Environment Variables & Secret API Keys
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+api_keys.json
+secrets.json
+
+# Operating System Temporary Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+
+# Editor & IDE Specific Files
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# Temporary Logs & Debug Files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+logs/
+
+# Local Dev Server & Cache Artifacts
+.cache/
+.parcel-cache/
+tmp/
+temp/
+scratch/

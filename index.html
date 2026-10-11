@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI Interview Coach - Master technical and HR interviews with interactive practice, mock interviews, smart keyword evaluation, flashcards, and real-time progress analytics.">
+    <meta name="keywords" content="interview preparation, technical interview, HR interview, mock interview, coding interview, DSA, Java, Python, SQL, web development">
+    <meta name="author" content="AI Interview Coach">
+    <title>AI Interview Coach | Practice Smarter. Interview Better. Get Hired.</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- App Container -->
+    <div class="app-container" id="appContainer">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar" aria-label="Main Navigation">
+            <div class="sidebar-header">
+                <div class="brand-logo">
+                    <div class="logo-icon">
+                        <i class="fa-solid fa-brain-circuit"></i>
+                    </div>
+                    <div class="brand-info">
+                        <h2 class="brand-title">Interview<span>AI</span></h2>
+                        <span class="brand-badge">PRO COACH</span>
+                    </div>
+                </div>
+                <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close Sidebar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">MAIN MENU</div>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <button class="nav-link active" data-section="dashboard" id="navDashboard">
+                            <i class="fa-solid fa-chart-pie"></i>
+                            <span>Dashboard</span>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-section="practice" id="navPractice">
+                            <i class="fa-solid fa-terminal"></i>
+                            <span>Practice Mode</span>
+                            <span class="nav-tag">Interactive</span>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-section="mock" id="navMock">
+                            <i class="fa-solid fa-user-tie"></i>
+                            <span>Mock Interview</span>
+                            <span class="nav-tag pulse">Timed</span>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-section="flashcards" id="navFlashcards">
+                            <i class="fa-solid fa-clone"></i>
+                            <span>Flashcards</span>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-section="analytics" id="navAnalytics">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <span>Analytics & Insights</span>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-section="history" id="navHistory">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                            <span>Practice History</span>
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="nav-section-label">CONFIGURATION</div>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <button class="nav-link" data-section="settings" id="navSettings">
+                            <i class="fa-solid fa-sliders"></i>
+                            <span>Settings</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Sidebar Footer User / Streak Card -->
+            <div class="sidebar-streak-card">
+                <div class="streak-icon-box">
+                    <i class="fa-solid fa-fire-flame-curved"></i>
+                </div>
+                <div class="streak-info">
+                    <span class="streak-title">Daily Streak</span>
+                    <strong class="streak-count" id="sidebarStreakDisplay">1 Day</strong>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Sidebar Overlay for Mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Main Content Area -->
+        <div class="main-wrapper">
+            <!-- Top Header Navbar -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="menu-toggle-btn" id="menuToggleBtn" aria-label="Toggle navigation menu">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="header-greeting">
+                        <h1 class="header-page-title" id="pageHeaderTitle">Dashboard</h1>
+                        <p class="header-subtitle" id="pageHeaderSubtitle">Practice Smarter. Interview Better. Get Hired.</p>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <!-- Daily Goal Widget -->
+                    <div class="daily-goal-pill" title="Today's Practice Target">
+                        <i class="fa-solid fa-bullseye"></i>
+                        <span id="headerGoalProgress">0 / 5 Today</span>
+                    </div>
+
+                    <!-- Theme Switcher -->
+                    <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle dark/light theme" title="Toggle Theme">
+                        <i class="fa-solid fa-sun light-icon"></i>
+                        <i class="fa-solid fa-moon dark-icon"></i>
+                    </button>
+
+                    <!-- Quick Practice Action -->
+                    <button class="btn btn-primary btn-sm header-action-btn" id="headerQuickPracticeBtn">
+                        <i class="fa-solid fa-play"></i>
+                        <span>Start Practice</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Main App Body / Views Container -->
+            <main class="content-body" id="mainContent">
+
+                <!-- ================= 1. DASHBOARD VIEW ================= -->
+                <section class="app-section active" id="section-dashboard">
+                    <!-- Hero Welcome Banner -->
+                    <div class="dashboard-hero">
+                        <div class="hero-content">
+                            <div class="hero-badge"><i class="fa-solid fa-sparkles"></i> AI Powered Preparation</div>
+                            <h2 class="hero-heading">Master Your Next Interview with Confidence</h2>
+                            <p class="hero-desc">Sharpen your responses across 10 specialized domains. Get instant keyword analysis, practice structured answers, and track your interview readiness.</p>
+                            <div class="hero-actions">
+                                <button class="btn btn-primary" id="dashStartPracticeBtn">
+                                    <i class="fa-solid fa-terminal"></i> Start Practice Session
+                                </button>
+                                <button class="btn btn-secondary" id="dashStartMockBtn">
+                                    <i class="fa-solid fa-user-tie"></i> Take Mock Interview
+                                </button>
+                                <button class="btn btn-outline" id="dashOpenFlashcardsBtn">
+                                    <i class="fa-solid fa-clone"></i> Flashcard Revision
+                                </button>
+                            </div>
+                        </div>
+                        <div class="hero-visual">
+                            <div class="stat-radial-preview">
+                                <div class="radial-ring">
+                                    <span class="radial-val" id="dashReadinessScore">0%</span>
+                                    <span class="radial-lbl">Readiness</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live KPI Statistics Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper icon-blue">
+                                <i class="fa-solid fa-circle-question"></i>
+                            </div>
+                            <div class="stat-meta">
+                                <span class="stat-label">Total Questions Practiced</span>
+                                <h3 class="stat-value" id="statTotalQuestions">0</h3>
+                                <span class="stat-trend positive"><i class="fa-solid fa-arrow-trend-up"></i> Lifetime attempts</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper icon-purple">
+                                <i class="fa-solid fa-laptop-code"></i>
+                            </div>
+                            <div class="stat-meta">
+                                <span class="stat-label">Completed Sessions</span>
+                                <h3 class="stat-value" id="statTotalSessions">0</h3>
+                                <span class="stat-trend neutral"><i class="fa-solid fa-layer-group"></i> Practice & mock</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper icon-emerald">
+                                <i class="fa-solid fa-award"></i>
+                            </div>
+                            <div class="stat-meta">
+                                <span class="stat-label">Average Practice Score</span>
+                                <h3 class="stat-value" id="statAvgScore">0%</h3>
+                                <span class="stat-trend" id="statAvgScoreTrend"><i class="fa-solid fa-chart-line"></i> Evaluation benchmark</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper icon-amber">
+                                <i class="fa-solid fa-fire"></i>
+                            </div>
+                            <div class="stat-meta">
+                                <span class="stat-label">Current Streak</span>
+                                <h3 class="stat-value" id="statCurrentStreak">1 Day</h3>
+                                <span class="stat-trend positive"><i class="fa-solid fa-bolt"></i> Keep practicing daily!</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard Secondary Grid -->
+                    <div class="dash-details-grid">
+                        <!-- Left Column: Daily Goal & Categories -->
+                        <div class="dash-col">
+                            <!-- Daily Goal Progress Card -->
+                            <div class="card goal-card">
+                                <div class="card-header">
+                                    <div class="card-title-group">
+                                        <i class="fa-solid fa-calendar-check card-icon"></i>
+                                        <h4 class="card-title">Daily Practice Goal</h4>
+                                    </div>
+                                    <span class="badge badge-info" id="goalStatusBadge">In Progress</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="goal-progress-container">
+                                        <div class="goal-text-row">
+                                            <span>Progress: <strong id="dashGoalFraction">0 / 5 questions</strong></span>
+                                            <span id="dashGoalPercent">0%</span>
+                                        </div>
+                                        <div class="progress-bar-track">
+                                            <div class="progress-bar-fill" id="dashGoalBar" style="width: 0%;"></div>
+                                        </div>
+                                    </div>
+                                    <p class="goal-tip" id="goalTipText">Answer questions today to maintain your daily streak!</p>
+                                </div>
+                            </div>
+
+                            <!-- Interview Categories Explorer -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-title-group">
+                                        <i class="fa-solid fa-tags card-icon"></i>
+                                        <h4 class="card-title">Interview Categories</h4>
+                                    </div>
+                                    <span class="card-action-sub">10 Domains</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="categories-chip-grid" id="dashboardCategoriesGrid">
+                                        <!-- Injected via JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Daily Interview Prep Tip -->
+                            <div class="card tip-card">
+                                <div class="card-header">
+                                    <div class="card-title-group">
+                                        <i class="fa-solid fa-lightbulb card-icon text-amber"></i>
+                                        <h4 class="card-title">Interview Mastery Tip</h4>
+                                    </div>
+                                    <button class="btn-icon" id="btnRefreshTip" title="New Tip"><i class="fa-solid fa-rotate-right"></i></button>
+                                </div>
+                                <div class="card-body">
+                                    <blockquote class="tip-quote" id="dailyTipQuote">
+                                        "Use the STAR method (Situation, Task, Action, Result) for behavioral questions, and explain your thought process out loud during technical interviews."
+                                    </blockquote>
+                                    <span class="tip-author" id="dailyTipAuthor">— Recommended Prep Strategy</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Recommended Topics & Recent Activity -->
+                        <div class="dash-col">
+                            <!-- Recommended Topics Card -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-title-group">
+                                        <i class="fa-solid fa-compass card-icon"></i>
+                                        <h4 class="card-title">Recommended Topics for You</h4>
+                                    </div>
+                                    <span class="card-action-sub">Based on performance</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="recommended-list" id="dashRecommendedList">
+                                        <!-- Dynamically generated list -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Recent Practice History Card -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-title-group">
+                                        <i class="fa-solid fa-clock-rotate-left card-icon"></i>
+                                        <h4 class="card-title">Recent Activity</h4>
+                                    </div>
+                                    <button class="btn btn-link btn-xs" id="dashViewAllHistoryBtn">View All</button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="recent-activity-list" id="dashRecentActivityList">
+                                        <!-- Injected via JS -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ================= 2. PRACTICE MODE VIEW ================= -->
+                <section class="app-section" id="section-practice">
+                    <!-- Practice Setup Header -->
+                    <div class="practice-control-bar">
+                        <div class="category-selector-wrapper">
+                            <label for="practiceCategorySelect" class="control-label"><i class="fa-solid fa-filter"></i> Category:</label>
+                            <select id="practiceCategorySelect" class="form-select">
+                                <option value="all">All Categories (Mixed Practice)</option>
+                                <option value="Java Interview">Java Interview</option>
+                                <option value="Python Interview">Python Interview</option>
+                                <option value="JavaScript Interview">JavaScript Interview</option>
+                                <option value="SQL Interview">SQL Interview</option>
+                                <option value="Data Structures and Algorithms">Data Structures and Algorithms</option>
+                                <option value="HTML and CSS">HTML and CSS</option>
+                                <option value="Computer Networks">Computer Networks</option>
+                                <option value="Operating Systems">Operating Systems</option>
+                                <option value="DBMS">DBMS</option>
+                                <option value="HR Interview">HR Interview</option>
+                            </select>
+                        </div>
+
+                        <div class="practice-session-meta">
+                            <div class="session-timer-pill" id="practiceTimerBox">
+                                <i class="fa-solid fa-stopwatch"></i>
+                                <span id="practiceTimerDisplay">00:00</span>
+                            </div>
+                            <div class="question-counter-pill">
+                                <span>Question </span>
+                                <strong id="practiceQuestionCounter">1 / 10</strong>
+                            </div>
+                            <button class="btn btn-secondary btn-sm" id="btnFinishPracticeSession">
+                                <i class="fa-solid fa-flag-checkered"></i> Finish Session
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Practice Question Card -->
+                    <div class="practice-card-container">
+                        <div class="card question-card">
+                            <div class="question-header">
+                                <div class="question-badge-row">
+                                    <span class="category-pill" id="practiceCategoryBadge">Java Interview</span>
+                                    <span class="difficulty-pill" id="practiceQuestionIdBadge">Question #1</span>
+                                </div>
+                                <button class="btn-icon" id="btnBookmarkQuestion" title="Bookmark for revision">
+                                    <i class="fa-regular fa-bookmark" id="practiceBookmarkIcon"></i>
+                                </button>
+                            </div>
+
+                            <div class="question-text-box">
+                                <h3 class="question-title" id="practiceQuestionText">Loading interview question...</h3>
+                            </div>
+
+                            <!-- Hint Box (Toggled) -->
+                            <div class="hint-accordion" id="practiceHintBox" style="display: none;">
+                                <div class="hint-header">
+                                    <i class="fa-solid fa-lightbulb text-amber"></i>
+                                    <strong>Coach Hint:</strong>
+                                </div>
+                                <p class="hint-content" id="practiceHintText"></p>
+                            </div>
+
+                            <!-- User Answer Input Area -->
+                            <div class="answer-input-container">
+                                <div class="answer-header-row">
+                                    <label for="userAnswerInput" class="answer-label">
+                                        <i class="fa-solid fa-pen-fancy"></i> Your Structured Response:
+                                    </label>
+                                    <div class="input-tools">
+                                        <span class="word-counter" id="answerWordCounter">0 words | 0 chars</span>
+                                        <button class="btn-tool" id="btnClearAnswer" title="Clear text"><i class="fa-solid fa-trash-can"></i></button>
+                                    </div>
+                                </div>
+                                <textarea id="userAnswerInput" class="form-textarea" placeholder="Type your answer here in detail. Structure your thoughts clearly, include key terms, mechanisms, and real-world trade-offs or examples..." rows="7"></textarea>
+                            </div>
+
+                            <!-- Action Buttons Bar -->
+                            <div class="question-actions-bar">
+                                <div class="actions-left">
+                                    <button class="btn btn-outline" id="btnToggleHint">
+                                        <i class="fa-solid fa-lightbulb"></i> <span id="toggleHintLabel">Show Hint</span>
+                                    </button>
+                                    <button class="btn btn-ghost" id="btnSkipQuestion">
+                                        <i class="fa-solid fa-forward-step"></i> Skip Question
+                                    </button>
+                                </div>
+                                <div class="actions-right">
+                                    <button class="btn btn-primary btn-lg" id="btnSubmitAnswer">
+                                        <i class="fa-solid fa-wand-magic-sparkles"></i> Submit Answer
+                                    </button>
+                                    <button class="btn btn-secondary btn-lg" id="btnNextQuestion" style="display: none;">
+                                        <span>Next Question</span> <i class="fa-solid fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Evaluation Feedback Card (Rendered After Submission) -->
+                        <div class="card feedback-card" id="evaluationFeedbackCard" style="display: none;">
+                            <div class="feedback-card-header">
+                                <div class="feedback-heading-group">
+                                    <div class="engine-badge">
+                                        <i class="fa-solid fa-microchip"></i>
+                                        <span id="feedbackEngineLabel">Basic Automated Feedback (Concept Matcher)</span>
+                                    </div>
+                                    <h4 class="feedback-title">Answer Evaluation & Quality Analysis</h4>
+                                </div>
+                                <div class="score-display-box" id="feedbackScorePill">
+                                    <span class="score-number" id="evalScoreValue">85</span>
+                                    <span class="score-max">/ 100</span>
+                                </div>
+                            </div>
+
+                            <div class="evaluation-summary-row">
+                                <div class="eval-quality-badge-box">
+                                    <span class="eval-quality-badge quality-good" id="evalQualityLabel">Good</span>
+                                </div>
+                                <p class="eval-disclaimer">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                    <strong>Learning Aid Notice:</strong> This score is calculated via automated keyword and concept pattern matching. It serves as an interactive practice guide, not a definitive professional evaluation.
+                                </p>
+                            </div>
+
+                            <!-- Concepts Breakdown -->
+                            <div class="concepts-grid">
+                                <div class="concept-column detected-column">
+                                    <div class="concept-column-header">
+                                        <i class="fa-solid fa-circle-check text-emerald"></i>
+                                        <h5>Relevant Concepts Detected (<span id="detectedCount">0</span>)</h5>
+                                    </div>
+                                    <div class="concepts-tags-wrapper" id="detectedConceptsList">
+                                        <!-- Detected Tags -->
+                                    </div>
+                                </div>
+
+                                <div class="concept-column missing-column">
+                                    <div class="concept-column-header">
+                                        <i class="fa-solid fa-triangle-exclamation text-amber"></i>
+                                        <h5>Important Concepts Missing (<span id="missingCount">0</span>)</h5>
+                                    </div>
+                                    <div class="concepts-tags-wrapper" id="missingConceptsList">
+                                        <!-- Missing Tags -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Improvement Suggestions -->
+                            <div class="eval-suggestions-box">
+                                <h5><i class="fa-solid fa-graduation-cap"></i> Improvement Suggestions:</h5>
+                                <ul class="suggestions-list" id="evalSuggestionsList">
+                                    <!-- List items -->
+                                </ul>
+                            </div>
+
+                            <!-- Model Answer Section -->
+                            <div class="model-answer-wrapper">
+                                <div class="model-answer-header">
+                                    <div class="model-header-title">
+                                        <i class="fa-solid fa-book-bookmark text-indigo"></i>
+                                        <h5>Model Reference Answer</h5>
+                                    </div>
+                                    <button class="btn btn-outline btn-xs" id="btnToggleModelAnswer">Hide Reference</button>
+                                </div>
+                                <div class="model-answer-content" id="modelAnswerText">
+                                    <!-- Injected model answer -->
+                                </div>
+                            </div>
+
+                            <!-- Bottom Retry or Continue Buttons -->
+                            <div class="feedback-actions">
+                                <button class="btn btn-outline" id="btnRetryAnswer">
+                                    <i class="fa-solid fa-rotate-left"></i> Retry Answer
+                                </button>
+                                <button class="btn btn-primary" id="btnFeedbackContinue">
+                                    Continue to Next Question <i class="fa-solid fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ================= 3. MOCK INTERVIEW MODE VIEW ================= -->
+                <section class="app-section" id="section-mock">
+                    <!-- Setup Screen -->
+                    <div class="mock-setup-container" id="mockSetupScreen">
+                        <div class="mock-intro-card card">
+                            <div class="mock-hero-icon">
+                                <i class="fa-solid fa-user-tie"></i>
+                            </div>
+                            <h2 class="mock-title">Full Mock Interview Simulation</h2>
+                            <p class="mock-desc">Simulate a high-stakes technical or HR interview session. Answer sequentially within a realistic timer, receive detailed feedback, and review your comprehensive readiness report at the end.</p>
+
+                            <div class="mock-form-grid">
+                                <div class="form-group">
+                                    <label for="mockCategorySelect" class="form-label">
+                                        <i class="fa-solid fa-layer-group"></i> Target Interview Category:
+                                    </label>
+                                    <select id="mockCategorySelect" class="form-select">
+                                        <option value="all">Comprehensive Mixed (All Categories)</option>
+                                        <option value="Java Interview">Java Interview</option>
+                                        <option value="Python Interview">Python Interview</option>
+                                        <option value="JavaScript Interview">JavaScript Interview</option>
+                                        <option value="SQL Interview">SQL Interview</option>
+                                        <option value="Data Structures and Algorithms">Data Structures and Algorithms</option>
+                                        <option value="HTML and CSS">HTML and CSS</option>
+                                        <option value="Computer Networks">Computer Networks</option>
+                                        <option value="Operating Systems">Operating Systems</option>
+                                        <option value="DBMS">DBMS</option>
+                                        <option value="HR Interview">HR Interview</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="mockQuestionCountSelect" class="form-label">
+                                        <i class="fa-solid fa-list-ol"></i> Number of Questions:
+                                    </label>
+                                    <select id="mockQuestionCountSelect" class="form-select">
+                                        <option value="5">5 Questions (Sprint ~ 10 mins)</option>
+                                        <option value="10" selected>10 Questions (Standard ~ 20 mins)</option>
+                                        <option value="15">15 Questions (In-depth ~ 30 mins)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="mockTimerLimitSelect" class="form-label">
+                                        <i class="fa-solid fa-stopwatch"></i> Session Timer:
+                                    </label>
+                                    <select id="mockTimerLimitSelect" class="form-select">
+                                        <option value="10">10 Minutes (Fast Paced)</option>
+                                        <option value="20" selected>20 Minutes (Standard)</option>
+                                        <option value="30">30 Minutes (Deep Dive)</option>
+                                        <option value="0">Untimed Practice</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mock-guidelines">
+                                <h4><i class="fa-solid fa-shield-halved"></i> Interview Protocol:</h4>
+                                <ul>
+                                    <li><i class="fa-solid fa-check"></i> Answer as completely and professionally as you would in a live interview.</li>
+                                    <li><i class="fa-solid fa-check"></i> Each submitted answer is scored and saved toward your final report.</li>
+                                    <li><i class="fa-solid fa-check"></i> You can skip questions, but unanswered questions contribute 0 points to the final aggregate score.</li>
+                                </ul>
+                            </div>
+
+                            <button class="btn btn-primary btn-lg mock-start-btn" id="btnStartMockInterview">
+                                <i class="fa-solid fa-play"></i> Begin Mock Interview
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Active Mock Interview Interface -->
+                    <div class="mock-active-container" id="mockActiveScreen" style="display: none;">
+                        <div class="mock-session-bar">
+                            <div class="mock-meta-left">
+                                <span class="badge badge-purple" id="mockActiveCategoryBadge">Java Interview</span>
+                                <span class="mock-counter-txt" id="mockActiveCounter">Question 1 of 10</span>
+                            </div>
+
+                            <div class="mock-progress-meter">
+                                <div class="mock-progress-track">
+                                    <div class="mock-progress-fill" id="mockProgressBar" style="width: 10%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="mock-meta-right">
+                                <div class="session-timer-pill" id="mockTimerPill">
+                                    <i class="fa-solid fa-stopwatch"></i>
+                                    <span id="mockTimerDisplay">20:00</span>
+                                </div>
+                                <button class="btn btn-outline btn-xs" id="btnQuitMockInterview">
+                                    <i class="fa-solid fa-door-open"></i> Abort
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Active Question Card -->
+                        <div class="card mock-active-card">
+                            <div class="mock-q-meta">
+                                <span class="category-pill" id="mockQuestionCategoryPill">Data Structures</span>
+                                <span class="badge badge-secondary" id="mockQuestionNumberPill">Q1</span>
+                            </div>
+
+                            <h3 class="mock-q-title" id="mockActiveQuestionText">Question text loading...</h3>
+
+                            <!-- Mock Hint Drawer (Collapsible) -->
+                            <div class="hint-accordion" id="mockHintBox" style="display: none;">
+                                <div class="hint-header">
+                                    <i class="fa-solid fa-lightbulb text-amber"></i>
+                                    <strong>Hint:</strong>
+                                </div>
+                                <p class="hint-content" id="mockHintText"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="answer-header-row">
+                                    <label for="mockAnswerInput" class="answer-label">Candidate Answer:</label>
+                                    <span class="word-counter" id="mockWordCounter">0 words</span>
+                                </div>
+                                <textarea id="mockAnswerInput" class="form-textarea" placeholder="Formulate your structured response here..." rows="8"></textarea>
+                            </div>
+
+                            <div class="mock-controls-row">
+                                <button class="btn btn-ghost" id="btnMockShowHint">
+                                    <i class="fa-solid fa-lightbulb"></i> <span id="mockHintBtnLabel">Hint</span>
+                                </button>
+                                <button class="btn btn-secondary" id="btnMockSkip">
+                                    <i class="fa-solid fa-forward-step"></i> Skip Question
+                                </button>
+                                <button class="btn btn-primary" id="btnMockSubmitNext">
+                                    <span>Submit & Proceed</span> <i class="fa-solid fa-check"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mock Interview Final Report Screen -->
+                    <div class="mock-report-container" id="mockReportScreen" style="display: none;">
+                        <div class="card mock-report-card">
+                            <div class="report-header">
+                                <div class="report-icon-box">
+                                    <i class="fa-solid fa-trophy text-amber"></i>
+                                </div>
+                                <h2 class="report-title">Mock Interview Performance Report</h2>
+                                <p class="report-subtitle" id="mockReportDate">Completed on October 11, 2026</p>
+                            </div>
+
+                            <!-- Performance Summary Grid -->
+                            <div class="report-kpi-grid">
+                                <div class="report-kpi-card">
+                                    <span class="kpi-label">Average Score</span>
+                                    <h3 class="kpi-value text-emerald" id="reportAvgScore">82%</h3>
+                                    <span class="kpi-grade" id="reportGradeLabel">Proficient Candidate</span>
+                                </div>
+                                <div class="report-kpi-card">
+                                    <span class="kpi-label">Questions Evaluated</span>
+                                    <h3 class="kpi-value" id="reportQuestionsEvaluated">10 / 10</h3>
+                                    <span class="kpi-grade" id="reportAnsweredStats">8 Answered, 2 Skipped</span>
+                                </div>
+                                <div class="report-kpi-card">
+                                    <span class="kpi-label">Time Elapsed</span>
+                                    <h3 class="kpi-value" id="reportTimeElapsed">14m 32s</h3>
+                                    <span class="kpi-grade">Pace: Good</span>
+                                </div>
+                            </div>
+
+                            <!-- Strengths & Weaknesses Analysis -->
+                            <div class="report-analysis-grid">
+                                <div class="analysis-box strength-box">
+                                    <div class="analysis-box-header">
+                                        <i class="fa-solid fa-circle-check text-emerald"></i>
+                                        <h4>Strongest Topics</h4>
+                                    </div>
+                                    <div class="analysis-tags" id="reportStrongTopics">
+                                        <!-- Tags -->
+                                    </div>
+                                </div>
+
+                                <div class="analysis-box weakness-box">
+                                    <div class="analysis-box-header">
+                                        <i class="fa-solid fa-circle-exclamation text-amber"></i>
+                                        <h4>Topics Requiring Additional Practice</h4>
+                                    </div>
+                                    <div class="analysis-tags" id="reportWeakTopics">
+                                        <!-- Tags -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Question Breakdown Accordion / List -->
+                            <div class="report-breakdown-section">
+                                <h4 class="breakdown-title"><i class="fa-solid fa-clipboard-list"></i> Question-by-Question Breakdown</h4>
+                                <div class="report-questions-list" id="reportQuestionsList">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+
+                            <!-- Report Action Buttons -->
+                            <div class="report-actions">
+                                <button class="btn btn-secondary" id="btnReportRestartMock">
+                                    <i class="fa-solid fa-rotate-left"></i> Take Another Mock
+                                </button>
+                                <button class="btn btn-primary" id="btnReportGoDashboard">
+                                    <i class="fa-solid fa-chart-pie"></i> Return to Dashboard
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ================= 4. FLASHCARDS VIEW ================= -->
+                <section class="app-section" id="section-flashcards">
+                    <div class="flashcard-toolbar">
+                        <div class="flashcard-filters">
+                            <div class="form-group-inline">
+                                <label for="flashcardCategoryFilter"><i class="fa-solid fa-filter"></i> Category:</label>
+                                <select id="flashcardCategoryFilter" class="form-select form-select-sm">
+                                    <option value="all">All Categories</option>
+                                    <option value="Java Interview">Java Interview</option>
+                                    <option value="Python Interview">Python Interview</option>
+                                    <option value="JavaScript Interview">JavaScript Interview</option>
+                                    <option value="SQL Interview">SQL Interview</option>
+                                    <option value="Data Structures and Algorithms">Data Structures & Algo</option>
+                                    <option value="HTML and CSS">HTML and CSS</option>
+                                    <option value="Computer Networks">Computer Networks</option>
+                                    <option value="Operating Systems">Operating Systems</option>
+                                    <option value="DBMS">DBMS</option>
+                                    <option value="HR Interview">HR Interview</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group-inline">
+                                <label for="flashcardMasteryFilter"><i class="fa-solid fa-layer-group"></i> Mastery:</label>
+                                <select id="flashcardMasteryFilter" class="form-select form-select-sm">
+                                    <option value="all">All Difficulties</option>
+                                    <option value="easy">Easy</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="difficult">Difficult</option>
+                                    <option value="unrated">Unrated</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="flashcard-stats-pill">
+                            <span id="flashcardCounter">Card 1 of 50</span>
+                            <button class="btn-icon" id="btnShuffleFlashcards" title="Shuffle Deck"><i class="fa-solid fa-shuffle"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Flashcard 3D Stage -->
+                    <div class="flashcard-stage">
+                        <div class="flashcard-scene" id="flashcardScene">
+                            <div class="flashcard-flipper" id="flashcardFlipper">
+                                <!-- Front Face (Question) -->
+                                <div class="flashcard-face flashcard-front">
+                                    <div class="card-face-header">
+                                        <span class="category-pill" id="fcFrontCategory">Java Interview</span>
+                                        <span class="mastery-pill" id="fcFrontMastery">Unrated</span>
+                                    </div>
+                                    <div class="card-face-body">
+                                        <span class="card-prompt-label"><i class="fa-solid fa-circle-question"></i> QUESTION:</span>
+                                        <h3 class="card-question-text" id="fcFrontQuestion">Loading Flashcard...</h3>
+                                    </div>
+                                    <div class="card-face-footer">
+                                        <span class="flip-hint-badge"><i class="fa-solid fa-arrow-rotate-right"></i> Click or press Space to reveal answer</span>
+                                    </div>
+                                </div>
+
+                                <!-- Back Face (Model Answer & Keywords) -->
+                                <div class="flashcard-face flashcard-back">
+                                    <div class="card-face-header">
+                                        <span class="category-pill" id="fcBackCategory">Java Interview</span>
+                                        <span class="badge badge-emerald"><i class="fa-solid fa-check"></i> MODEL ANSWER</span>
+                                    </div>
+                                    <div class="card-face-body scrollable-back">
+                                        <div class="card-answer-box" id="fcBackAnswer">
+                                            Model answer loading...
+                                        </div>
+                                        <div class="card-keywords-box">
+                                            <strong>Key Concepts:</strong>
+                                            <div class="keywords-wrap" id="fcBackKeywords">
+                                                <!-- Injected keywords -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-face-footer">
+                                        <span class="flip-hint-badge"><i class="fa-solid fa-arrow-rotate-left"></i> Click card to flip back</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Flashcard Controls -->
+                        <div class="flashcard-action-bar">
+                            <button class="btn btn-outline" id="btnPrevCard">
+                                <i class="fa-solid fa-arrow-left"></i> Previous
+                            </button>
+
+                            <div class="mastery-rating-buttons">
+                                <button class="btn btn-mastery mastery-easy" id="btnMarkEasy" title="Mark as Easy">
+                                    <i class="fa-regular fa-face-smile"></i> Easy
+                                </button>
+                                <button class="btn btn-mastery mastery-med" id="btnMarkMedium" title="Mark as Medium">
+                                    <i class="fa-regular fa-face-meh"></i> Medium
+                                </button>
+                                <button class="btn btn-mastery mastery-hard" id="btnMarkHard" title="Mark as Difficult">
+                                    <i class="fa-regular fa-face-frown"></i> Difficult
+                                </button>
+                            </div>
+
+                            <button class="btn btn-outline" id="btnNextCard">
+                                Next <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+
+                        <!-- Revision Progress Summary -->
+                        <div class="revision-summary-strip">
+                            <div class="revision-strip-item">
+                                <span class="dot-indicator dot-easy"></span>
+                                <span>Easy: <strong id="fcCountEasy">0</strong></span>
+                            </div>
+                            <div class="revision-strip-item">
+                                <span class="dot-indicator dot-medium"></span>
+                                <span>Medium: <strong id="fcCountMedium">0</strong></span>
+                            </div>
+                            <div class="revision-strip-item">
+                                <span class="dot-indicator dot-hard"></span>
+                                <span>Difficult: <strong id="fcCountHard">0</strong></span>
+                            </div>
+                            <div class="revision-strip-item">
+                                <span class="dot-indicator dot-unrated"></span>
+                                <span>Unrated: <strong id="fcCountUnrated">0</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ================= 5. ANALYTICS & INSIGHTS VIEW ================= -->
+                <section class="app-section" id="section-analytics">
+                    <!-- Analytics Header Stats -->
+                    <div class="analytics-kpi-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper icon-blue">
+                                <i class="fa-solid fa-list-check"></i>
+                            </div>
+                            <div class="stat-meta">
+                                <span class="stat-label">Total Answers Evaluated</span>
+                                <h3 class="stat-value" id="anTotalEvaluated">0</h3>
+                                <span class="stat-trend positive">All categories</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper icon-emerald">
+                                <i class="fa-solid fa-gauge-high"></i>
+                            </div>
+                            <div class="stat-meta">
+                                <span class="stat-label">Overall Average Score</span>
+                                <h3 class="stat-value" id="anOverallAvg">0%</h3>
+                                <span class="stat-trend neutral">Across all sessions</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper icon-purple">
+                                <i class="fa-solid fa-medal"></i>
+                            </div>
+                            <div class="stat-meta">
+                                <span class="stat-label">Mock Interviews Taken</span>
+                                <h3 class="stat-value" id="anMockSessions">0</h3>
+                                <span class="stat-trend positive">Full simulations</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper icon-amber">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            </div>
+                            <div class="stat-meta">
+                                <span class="stat-label">Primary Growth Area</span>
+                                <h3 class="stat-value text-xs-heading" id="anWeakestTopic">—</h3>
+                                <span class="stat-trend" id="anWeakestTopicDetail">Needs revision</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Grid -->
+                    <div class="analytics-charts-grid">
+                        <!-- Category Competency Radar / Bar Chart -->
+                        <div class="card chart-card">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <i class="fa-solid fa-chart-pie card-icon"></i>
+                                    <h4 class="card-title">Category-wise Mastery & Performance</h4>
+                                </div>
+                                <span class="card-badge">Live Metrics</span>
+                            </div>
+                            <div class="card-body chart-body">
+                                <div class="canvas-wrapper">
+                                    <canvas id="categoryRadarChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Progress Over Time Line Chart -->
+                        <div class="card chart-card">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <i class="fa-solid fa-chart-line card-icon"></i>
+                                    <h4 class="card-title">Recent Session Scores & Trends</h4>
+                                </div>
+                                <span class="card-badge">Score History</span>
+                            </div>
+                            <div class="card-body chart-body">
+                                <div class="canvas-wrapper">
+                                    <canvas id="scoreHistoryLineChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Performance Breakdown & Recommendations Table -->
+                    <div class="card analytics-table-card">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <i class="fa-solid fa-table-list card-icon"></i>
+                                <h4 class="card-title">Detailed Domain Breakdown & Action Plan</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="custom-table" id="domainBreakdownTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Category</th>
+                                            <th>Questions Practiced</th>
+                                            <th>Average Score</th>
+                                            <th>Proficiency Level</th>
+                                            <th>Recommended Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="domainBreakdownTbody">
+                                        <!-- Rows injected by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ================= 6. HISTORY VIEW ================= -->
+                <section class="app-section" id="section-history">
+                    <div class="history-header-bar">
+                        <div class="history-title-group">
+                            <h2>Practice & Mock Session Logs</h2>
+                            <p>Complete historical log of all your interview answers, scores, and dates saved in your browser.</p>
+                        </div>
+                        <div class="history-actions">
+                            <button class="btn btn-outline btn-sm" id="btnExportHistory" title="Export as JSON">
+                                <i class="fa-solid fa-download"></i> Export Data
+                            </button>
+                            <button class="btn btn-danger btn-sm" id="btnClearHistory">
+                                <i class="fa-solid fa-trash-can"></i> Clear History
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card history-table-card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="custom-table" id="historyTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Date & Time</th>
+                                            <th>Mode</th>
+                                            <th>Category</th>
+                                            <th>Questions</th>
+                                            <th>Score</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="historyTableBody">
+                                        <!-- Injected by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="empty-state-box" id="historyEmptyState" style="display: none;">
+                                <i class="fa-solid fa-folder-open empty-icon"></i>
+                                <h4>No Practice History Recorded Yet</h4>
+                                <p>Begin an interactive practice session or take a mock interview to start logging your preparation progress!</p>
+                                <button class="btn btn-primary" id="btnHistoryStartPractice">Start Practicing Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ================= 7. SETTINGS VIEW ================= -->
+                <section class="app-section" id="section-settings">
+                    <div class="settings-container">
+                        <!-- Theme and Preferences -->
+                        <div class="card settings-card">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <i class="fa-solid fa-palette card-icon"></i>
+                                    <h4 class="card-title">Theme & Interface</h4>
+                                </div>
+                            </div>
+                            <div class="card-body settings-body">
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <strong>Interface Theme</strong>
+                                        <p>Select your preferred color scheme for interview preparation.</p>
+                                    </div>
+                                    <div class="theme-choice-buttons">
+                                        <button class="btn-theme-choice" data-theme-choice="dark" id="btnThemeChoiceDark">
+                                            <i class="fa-solid fa-moon"></i> Dark Navy
+                                        </button>
+                                        <button class="btn-theme-choice" data-theme-choice="light" id="btnThemeChoiceLight">
+                                            <i class="fa-solid fa-sun"></i> Clean Light
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <strong>Sound Effects & Audio Chimes</strong>
+                                        <p>Play pleasant audio cues on answer submission, timer alerts, and streak achievements (via Web Audio API).</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="settingSoundToggle" checked>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Study Goals and Practice Limits -->
+                        <div class="card settings-card">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <i class="fa-solid fa-bullseye card-icon"></i>
+                                    <h4 class="card-title">Study Goals & Timers</h4>
+                                </div>
+                            </div>
+                            <div class="card-body settings-body">
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <strong>Daily Practice Goal</strong>
+                                        <p>Target number of questions to answer each day to maintain momentum.</p>
+                                    </div>
+                                    <div class="setting-input-wrapper">
+                                        <input type="number" id="settingDailyGoalInput" class="form-input form-input-sm" min="1" max="50" value="5">
+                                        <span class="input-suffix">questions / day</span>
+                                    </div>
+                                </div>
+
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <strong>Default Mock Timer Duration</strong>
+                                        <p>Standard mock session time allocated for paced interview simulations.</p>
+                                    </div>
+                                    <select id="settingDefaultTimerSelect" class="form-select form-select-sm">
+                                        <option value="10">10 Minutes</option>
+                                        <option value="20" selected>20 Minutes</option>
+                                        <option value="30">30 Minutes</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI API Integration (Optional Configurable) -->
+                        <div class="card settings-card">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <i class="fa-solid fa-brain-circuit card-icon"></i>
+                                    <h4 class="card-title">AI Evaluation Mode (Optional Configuration)</h4>
+                                </div>
+                                <span class="badge badge-info">Configurable</span>
+                            </div>
+                            <div class="card-body settings-body">
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <strong>Enable Custom AI API Mode</strong>
+                                        <p>Connect your own external AI endpoint or backend for LLM-based feedback in addition to local keyword analysis.</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="settingAiApiToggle">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+
+                                <div class="ai-config-fields" id="aiConfigFields" style="display: none;">
+                                    <div class="form-group">
+                                        <label for="aiApiEndpointInput" class="form-label">Backend / Proxy API Endpoint URL:</label>
+                                        <input type="url" id="aiApiEndpointInput" class="form-input" placeholder="https://your-backend.example.com/api/evaluate">
+                                        <small class="form-help">Enter a secure proxy endpoint that handles your interview evaluation requests.</small>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="aiApiKeyInput" class="form-label">Custom API Key (Saved locally in your browser only):</label>
+                                        <div class="input-password-wrap">
+                                            <input type="password" id="aiApiKeyInput" class="form-input" placeholder="sk-...">
+                                            <button type="button" class="btn-toggle-eye" id="btnToggleApiKeyEye"><i class="fa-solid fa-eye"></i></button>
+                                        </div>
+                                        <small class="form-help text-warning"><i class="fa-solid fa-lock"></i> Note: For security, never hardcode private keys into client source code. Only provide keys if using your personal proxy.</small>
+                                    </div>
+                                    <button class="btn btn-secondary btn-sm" id="btnSaveAiConfig">Save AI Settings</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Management & Reset -->
+                        <div class="card settings-card border-danger-subtle">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <i class="fa-solid fa-triangle-exclamation text-rose card-icon"></i>
+                                    <h4 class="card-title text-rose">Application Data Management</h4>
+                                </div>
+                            </div>
+                            <div class="card-body settings-body">
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <strong>Reset All Application Data</strong>
+                                        <p>Erase all saved practice history, streak count, flashcard ratings, and custom preferences from browser LocalStorage.</p>
+                                    </div>
+                                    <button class="btn btn-danger" id="btnResetAllData">
+                                        <i class="fa-solid fa-triangle-exclamation"></i> Reset Application Data
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- About Platform -->
+                        <div class="card settings-card">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <i class="fa-solid fa-circle-info card-icon"></i>
+                                    <h4 class="card-title">About AI Interview Coach</h4>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-2"><strong>AI Interview Coach</strong> is a full-featured, zero-dependency interview preparation web application designed for students, software engineers, and job seekers.</p>
+                                <p class="text-muted text-sm mb-3">Version 2.0.0 • Pure Vanilla Web Stack (HTML5, CSS3, Vanilla ES6+ JavaScript, Chart.js, LocalStorage).</p>
+                                <div class="about-feature-pills">
+                                    <span class="badge badge-secondary"><i class="fa-solid fa-bolt"></i> 10 Domains</span>
+                                    <span class="badge badge-secondary"><i class="fa-solid fa-shield-halved"></i> 100% Client-side Privacy</span>
+                                    <span class="badge badge-secondary"><i class="fa-solid fa-mobile-screen"></i> Fully Responsive</span>
+                                    <span class="badge badge-secondary"><i class="fa-solid fa-database"></i> LocalStorage Persistent</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Session Summary Modal -->
+    <div class="modal-overlay" id="sessionSummaryModal" style="display: none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-title-wrap">
+                    <i class="fa-solid fa-flag-checkered text-emerald modal-icon"></i>
+                    <h3>Practice Session Summary</h3>
+                </div>
+                <button class="modal-close-btn" id="btnCloseSummaryModal" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="summary-kpis">
+                    <div class="summary-kpi">
+                        <span class="summary-lbl">Questions Attempted</span>
+                        <h4 id="sumAttemptedCount">0</h4>
+                    </div>
+                    <div class="summary-kpi">
+                        <span class="summary-lbl">Session Avg Score</span>
+                        <h4 class="text-emerald" id="sumAvgScore">0%</h4>
+                    </div>
+                    <div class="summary-kpi">
+                        <span class="summary-lbl">Time Elapsed</span>
+                        <h4 id="sumDuration">00:00</h4>
+                    </div>
+                </div>
+                <p class="summary-message" id="sumEncouragement">Great effort! Consistent daily practice is the key to passing top technical interviews.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btnSummaryReturnHome">Go to Dashboard</button>
+                <button class="btn btn-primary" id="btnSummaryContinuePractice">Keep Practicing</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal (Generic for Reset / Clear) -->
+    <div class="modal-overlay" id="confirmModal" style="display: none;">
+        <div class="modal-card modal-sm">
+            <div class="modal-header">
+                <div class="modal-title-wrap">
+                    <i class="fa-solid fa-triangle-exclamation text-rose modal-icon"></i>
+                    <h3 id="confirmModalTitle">Confirm Action</h3>
+                </div>
+                <button class="modal-close-btn" id="btnCancelConfirm" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmModalMessage">Are you sure you want to proceed? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" id="btnConfirmDismiss">Cancel</button>
+                <button class="btn btn-danger" id="btnConfirmAccept">Confirm & Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Toast Notification Container -->
+    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+    <!-- Scripts Loading in Exact Order Required -->
+    <script src="questions.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
